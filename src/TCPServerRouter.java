@@ -12,10 +12,11 @@ public class TCPServerRouter {
         //Accepting connections
         ServerSocket serverSocket = null; // server socket for accepting connections
         try {
-            serverSocket = new ServerSocket(5555);
-            System.out.println("ServerRouter is Listening on port: 5555.");
+        	int port = 5558;
+            serverSocket = new ServerSocket(port);
+            System.out.println("ServerRouter is Listening on port: " + port +".");
         } catch (IOException e) {
-            System.err.println("Could not listen on port: 5555.");
+            System.err.println("Could not listen on port: " + 5555 + ".");
             System.exit(1);
         }
 			
