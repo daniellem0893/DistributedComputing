@@ -4,7 +4,7 @@ import java.net.*;
 public class TCPClient {   
     public static void main(String[] args) throws IOException {
         // Variables for setting up connection and communication
-        Socket Socket = null; // socket to connect with ServerRouter
+        Socket socket = null; // socket to connect with ServerRouter
         PrintWriter out = null; // for writing to ServerRouter
         BufferedReader in = null; // for reading form ServerRouter
         InetAddress addr = InetAddress.getLocalHost();
@@ -14,9 +14,9 @@ public class TCPClient {
 
         // Tries to connect to the ServerRouter
         try {
-            Socket = new Socket(routerName, SockNum);
-            out = new PrintWriter(Socket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(Socket.getInputStream()));
+            socket = new Socket(routerName, SockNum);
+            out = new PrintWriter(socket.getOutputStream(), true);
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         } catch(UnknownHostException e) {
             System.err.println("Don't know about router: " + routerName);
             System.exit(1);
@@ -60,6 +60,6 @@ public class TCPClient {
         // closing connections
         out.close();
         in.close();
-        Socket.close();
+        socket.close();
     }
 }
