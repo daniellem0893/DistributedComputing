@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.*;
+import java.util.*;
 	
 public class SThread extends Thread 
 {
@@ -36,11 +37,13 @@ public class SThread extends Thread
             }
 
             //Check if destination is in the routing table. If it is, get its corresponding socket and instantiate outTo to write to it.
+            long rTableLookupStartTime = System.currentTimeMillis();
             for (int i = 0; i < 10; i++) {
                 if (destination.equals((String) RTable[i][0])){
                         outSocket = (Socket) RTable[i][1];
                         System.out.println("Found destination: " + destination);
                         outTo = new PrintWriter(outSocket.getOutputStream(), true);
+                        
                 }
             }
             //Communication loop: Read each line from in and print it to outTo	
