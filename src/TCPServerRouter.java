@@ -1,41 +1,128 @@
 import java.net.*;
 import java.io.*;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 
 public class TCPServerRouter {
+	
+	static int SockNum = 8181;
+	static boolean wait = true;
+	
     public static void main(String[] args) throws IOException {
-        Socket clientSocket = null; //Socket for the thread
-        Object [][] RoutingTable = new Object [10][2];
-        int SockNum = 5555; //Port number
-        int ind = 0; //Index in the routing table	
-
+    	
+    	 Socket clientSocket = null; // socket for the thread
+    	 //ServerSocket serverSocket = null; // server socket for accepting connections
+    	 int ind = 0; // indext in the routing table
+    	
+        Object [][] RoutingTable = new Object [10][2]; // routing table
+         // port number
+        Boolean Running = true;
+    	
+        
+        JFrame f = new JFrame();
+        f.setTitle("Server Router");
+        f.setSize(300, 250);
+        f.setLocationRelativeTo(null);
+       
+        
+        final JPanel panel = new JPanel();
+        
+        JLabel port = new JLabel("Port Number: ");
+      //  JLabel status = new JLabel("Waiting to establish port number.");
+        JTextField text = new JTextField();
+        JButton submit = new JButton("submit");
+        
+        text.setText(Integer.toString(SockNum));
+        text.setEditable(true);
+        text.setColumns(15);
+        
+        submit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+              String temp = text.getText();
+              SockNum = Integer.parseInt(temp);
+              wait = false;
+              /*
+              //ServerSocket serverSocket = null; // server socket for accepting connections
+              try {
+              	//int tempport = SockNum;
+                  serverSocket = new ServerSocket(SockNum);
+                  System.out.println("ServerRouter is Listening on port: " + SockNum +".");
+                  //status.setText("ServerRouter is Listening on port: " + SockNum +".");
+              } catch (IOException e1) {
+                  System.err.println("Could not listen on port: " + SockNum + ".");
+                //  status.setText("Could not listen on port: " + SockNum + ".");
+                  System.exit(1);
+              }
+      			
+              // Creating threads with accepted connections
+              while (Running == true)
+              {
+                  try {
+                      clientSocket = serverSocket.accept();
+                      SThread t = new SThread(RoutingTable, clientSocket, ind); // creates a thread with a random port
+                      t.start(); // starts the thread
+                      ind++; // increments the index
+                      System.out.println("ServerRouter connected with Client/Server: " + clientSocket.getInetAddress().getHostAddress());
+                  } catch (IOException e1) {
+                      System.err.println("Client/Server failed to connect.");
+                      System.exit(1);
+                  }
+              }
+              */
+            }          
+         });
+        
+        panel.add(port);
+        panel.add(text);
+        panel.add(submit);
+        //panel.add(status);
+        
+        
+        
+        f.add(panel, BorderLayout.CENTER);
+        
+        panel.setVisible(true);
+        f.setVisible(true);
+        
+        while(wait == true)
+        {
+        	try {
+				Thread.sleep(500);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+        }
+        
         //Accepting connections
-        ServerSocket serverSocket = null; //Server socket for accepting connections
+        ServerSocket serverSocket = null; // server socket for accepting connections
         try {
-            int port = 5558;
-            serverSocket = new ServerSocket(port);
-            System.out.println("ServerRouter is Listening on port: " + port +".");
+        	//int tempport = SockNum;
+            serverSocket = new ServerSocket(SockNum);
+            System.out.println("ServerRouter is Listening on port: " + SockNum +".");
         } catch (IOException e) {
-            System.err.println("Could not listen on port: " + 5555 + ".");
+            System.err.println("Could not listen on port: " + SockNum + ".");
             System.exit(1);
         }
 			
-        //Creating threads with accepted connections
-        while(true)
+        // Creating threads with accepted connections
+        while (Running == true)
         {
             try {
-                clientSocket = serverSocket.accept(); //Wait for a connection then assign it to clientSocket
-                SThread t = new SThread(RoutingTable, clientSocket, ind); //Thread for that connection.
-                t.start();
-                ind++;
+                clientSocket = serverSocket.accept();
+                SThread t = new SThread(RoutingTable, clientSocket, ind); // creates a thread with a random port
+                t.start(); // starts the thread
+                ind++; // increments the index
                 System.out.println("ServerRouter connected with Client/Server: " + clientSocket.getInetAddress().getHostAddress());
             } catch (IOException e) {
                 System.err.println("Client/Server failed to connect.");
-                break;
+                System.exit(1);
             }
         }
+        
         //closing connections
         clientSocket.close();
         serverSocket.close();
-        System.exit(1);
     }
 }

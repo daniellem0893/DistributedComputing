@@ -1,7 +1,24 @@
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.*;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+
+
 public class TCPServer {
+	
+	static boolean wait = true;
+	static int SockNum;
+	static String host;
+	static String routerName;
+	
     public static void main(String[] args) throws IOException {
       	
         // Variables for setting up connection and communication
@@ -9,10 +26,73 @@ public class TCPServer {
         PrintWriter out = null; // for writing to ServerRouter
         BufferedReader in = null; // for reading form ServerRouter
         InetAddress addr = InetAddress.getLocalHost();
-        String host = addr.getHostAddress(); // Server machine's IP			
+        host = addr.getHostAddress(); // Server machine's IP			
        // String routerName = "j263-08.cse1.spsu.edu"; // ServerRouter host name
-        String routerName = addr.getHostAddress();
-        int SockNum = 5558; // port number
+        routerName = addr.getHostAddress();
+        SockNum = 8181; // port number
+        
+        JFrame f = new JFrame();
+        f.setTitle("Server");
+        f.setSize(300, 250);
+        f.setLocationRelativeTo(null);
+       
+        
+        final JPanel panel = new JPanel();
+        
+        JLabel rName = new JLabel("Router Name: ");
+      //  JLabel status = new JLabel("Waiting to establish port number.");
+        JTextField rNameText = new JTextField(routerName);
+        JLabel hName = new JLabel("Host Name: ");
+        JTextField hostText = new JTextField(host);
+        JLabel port = new JLabel("Port Number: ");
+        JTextField portText = new JTextField(Integer.toString(SockNum));
+        JButton submit = new JButton("submit");
+        
+        
+        rNameText.setEditable(true);
+        rNameText.setColumns(15);
+
+        portText.setEditable(true);
+        portText.setColumns(15);
+        
+        hostText.setEditable(true);
+        hostText.setColumns(15);
+
+        panel.add(rName);
+        panel.add(rNameText);
+        panel.add(hName);
+        panel.add(hostText);
+        panel.add(port);
+        panel.add(portText);
+        panel.add(submit);
+        //panel.add(status);
+        
+        f.add(panel, BorderLayout.CENTER);
+        
+        panel.setVisible(true);
+        f.setVisible(true);
+        
+        submit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+              String tempRName = rNameText.getText();
+              routerName = tempRName;
+              String tempHostName = hostText.getText();
+              host = tempHostName;
+              String tempPort = portText.getText();
+              SockNum = Integer.parseInt(tempPort);
+              wait = false;
+            }
+        });
+        
+        while(wait == true)
+        {
+        	try {
+				Thread.sleep(500);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+        }
 			
         // Tries to connect to the ServerRouter
         try {
