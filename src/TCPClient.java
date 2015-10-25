@@ -38,22 +38,25 @@ public class TCPClient {
         fromServer = in.readLine();//initial receive from router (verification of connection)
         System.out.println("ServerRouter: " + fromServer);
         out.println(host); // Client sends the IP of its machine as initial send
-        t0 = System.currentTimeMillis();
-
+        //t0 = System.currentTimeMillis();
+        TimeStuff.startTimer();
+        
         // Communication while loop
         while ((fromServer = in.readLine()) != null) {
             System.out.println("Server: " + fromServer);
-            t1 = System.currentTimeMillis();
+            //t1 = System.currentTimeMillis();
             if (fromServer.equals("Bye.")) // exit statement
                 break;
-            t = t1 - t0;
-            System.out.println("Cycle time: " + t);
+            //t = t1 - t0;
+            //System.out.println("Cycle time: " + t);
+            TimeStuff.stopTimer("Cycle time: ");
 
             fromUser = fromFile.readLine(); // reading strings from a file
             if (fromUser != null) {
                 System.out.println("Client: " + fromUser);
                 out.println(fromUser); // sending the strings to the Server via ServerRouter
-                t0 = System.currentTimeMillis();
+                //t0 = System.currentTimeMillis();
+                TimeStuff.startTimer();
             }
         }
 
