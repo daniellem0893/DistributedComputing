@@ -8,6 +8,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 
@@ -48,6 +50,8 @@ public class TCPServer {
         JTextField portText = new JTextField(Integer.toString(SockNum));
         JButton submit = new JButton("submit");
         
+        JTextArea messages = new JTextArea("Messages will show up here.");
+        JScrollPane scroll = new JScrollPane(messages);
         
         rNameText.setEditable(true);
         rNameText.setColumns(15);
@@ -57,6 +61,11 @@ public class TCPServer {
         
         hostText.setEditable(true);
         hostText.setColumns(15);
+        
+        messages.setColumns(25);
+        messages.setRows(5);
+        messages.setLineWrap(true);
+        messages.setWrapStyleWord(true);
 
         panel.add(rName);
         panel.add(rNameText);
@@ -65,6 +74,7 @@ public class TCPServer {
         panel.add(port);
         panel.add(portText);
         panel.add(submit);
+        panel.add(scroll);
         //panel.add(status);
         
         f.add(panel, BorderLayout.CENTER);
@@ -101,9 +111,11 @@ public class TCPServer {
             in = new BufferedReader(new InputStreamReader(Socket.getInputStream()));
         } catch (UnknownHostException e) {
             System.err.println("Don't know about router: " + routerName);
+            messages.setText("Don't know about router: " + routerName);
             System.exit(1);
         } catch (IOException e) {
             System.err.println("Couldn't get I/O for the connection to: " + routerName);
+            messages.setText("Couldn't get I/O for the connection to: " + routerName);
             System.exit(1);
         }
 				
@@ -117,14 +129,17 @@ public class TCPServer {
         out.println(address);// initial send (IP of the destination Client)
         fromClient = in.readLine();// initial receive from router (verification of connection)
         System.out.println("ServerRouter: " + fromClient);
+        messages.setText("ServerRouter: " + fromClient);
 			         
         // Communication while loop
       	while ((fromClient = in.readLine()) != null) {
             System.out.println("Client said: " + fromClient);
+            messages.setText(messages.getText() + "\n" + "Client said: " + fromClient);
             if (fromClient.equals("Bye.")) // exit statement
                 break;
             fromServer = fromClient.toUpperCase(); // converting received message to upper case
             System.out.println("Server said: " + fromServer);
+            messages.setText(messages.getText() + "\n" + "Server said: " + fromServer);
             out.println(fromServer); // sending the converted message back to the Client via ServerRouter
         }
 			

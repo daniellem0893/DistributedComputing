@@ -33,49 +33,31 @@ public class TCPServerRouter {
         JTextField text = new JTextField();
         JButton submit = new JButton("submit");
         
+        JTextArea messages = new JTextArea("Messages will show up here.");
+        JScrollPane scroll = new JScrollPane(messages);
+        
+        
         text.setText(Integer.toString(SockNum));
         text.setEditable(true);
         text.setColumns(15);
+        
+        messages.setColumns(25);
+        messages.setRows(5);
+        messages.setLineWrap(true);
+        messages.setWrapStyleWord(true);
         
         submit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
               String temp = text.getText();
               SockNum = Integer.parseInt(temp);
               wait = false;
-              /*
-              //ServerSocket serverSocket = null; // server socket for accepting connections
-              try {
-              	//int tempport = SockNum;
-                  serverSocket = new ServerSocket(SockNum);
-                  System.out.println("ServerRouter is Listening on port: " + SockNum +".");
-                  //status.setText("ServerRouter is Listening on port: " + SockNum +".");
-              } catch (IOException e1) {
-                  System.err.println("Could not listen on port: " + SockNum + ".");
-                //  status.setText("Could not listen on port: " + SockNum + ".");
-                  System.exit(1);
-              }
-      			
-              // Creating threads with accepted connections
-              while (Running == true)
-              {
-                  try {
-                      clientSocket = serverSocket.accept();
-                      SThread t = new SThread(RoutingTable, clientSocket, ind); // creates a thread with a random port
-                      t.start(); // starts the thread
-                      ind++; // increments the index
-                      System.out.println("ServerRouter connected with Client/Server: " + clientSocket.getInetAddress().getHostAddress());
-                  } catch (IOException e1) {
-                      System.err.println("Client/Server failed to connect.");
-                      System.exit(1);
-                  }
-              }
-              */
             }          
          });
         
         panel.add(port);
         panel.add(text);
         panel.add(submit);
+        panel.add(scroll);
         //panel.add(status);
         
         
@@ -101,8 +83,10 @@ public class TCPServerRouter {
         	//int tempport = SockNum;
             serverSocket = new ServerSocket(SockNum);
             System.out.println("ServerRouter is Listening on port: " + SockNum +".");
+            messages.setText("ServerRouter is Listening on port: " + SockNum +".");
         } catch (IOException e) {
             System.err.println("Could not listen on port: " + SockNum + ".");
+            messages.setText("Could not listen on port: " + SockNum + ".");
             System.exit(1);
         }
 			
@@ -115,8 +99,10 @@ public class TCPServerRouter {
                 t.start(); // starts the thread
                 ind++; // increments the index
                 System.out.println("ServerRouter connected with Client/Server: " + clientSocket.getInetAddress().getHostAddress());
+                messages.setText(messages.getText() + "\n" + "ServerRouter connected with Client/Server: " + clientSocket.getInetAddress().getHostAddress());
             } catch (IOException e) {
                 System.err.println("Client/Server failed to connect.");
+                messages.setText(messages.getText() + "\n" + "Client/Server failed to conenct.");
                 System.exit(1);
             }
         }

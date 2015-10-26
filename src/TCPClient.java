@@ -8,12 +8,16 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.text.DefaultCaret;
 
 public class TCPClient {  
 	
 	static String host;
 	static String routerName;
+	static String fileName;
 	static int SockNum;
 	static boolean wait = true;
 	
@@ -29,7 +33,7 @@ public class TCPClient {
         
         JFrame f = new JFrame();
         f.setTitle("Server");
-        f.setSize(300, 250);
+        f.setSize(305, 275);
         f.setLocationRelativeTo(null);
        
         
@@ -42,7 +46,12 @@ public class TCPClient {
         JTextField hostText = new JTextField(host);
         JLabel port = new JLabel("Port Number: ");
         JTextField portText = new JTextField(Integer.toString(SockNum));
+        JLabel file = new JLabel("File Name: ");
+        JTextField fileText = new JTextField("file.txt");
         JButton submit = new JButton("submit");
+        
+        JTextArea messages = new JTextArea("Messages will show up here.");
+        JScrollPane scroll = new JScrollPane(messages);
         
         
         rNameText.setEditable(true);
@@ -53,6 +62,17 @@ public class TCPClient {
         
         hostText.setEditable(true);
         hostText.setColumns(15);
+        
+        fileText.setEditable(true);
+        fileText.setColumns(15);
+        
+        messages.setColumns(25);
+        messages.setRows(5);
+        messages.setLineWrap(true);
+        messages.setWrapStyleWord(true);
+        
+        DefaultCaret caret = (DefaultCaret)messages.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.OUT_BOTTOM);
 
         panel.add(rName);
         panel.add(rNameText);
@@ -60,7 +80,10 @@ public class TCPClient {
         panel.add(hostText);
         panel.add(port);
         panel.add(portText);
+        panel.add(file);
+        panel.add(fileText);
         panel.add(submit);
+        panel.add(scroll);
         //panel.add(status);
         
         f.add(panel, BorderLayout.CENTER);
@@ -76,6 +99,7 @@ public class TCPClient {
               host = tempHostName;
               String tempPort = portText.getText();
               SockNum = Integer.parseInt(tempPort);
+              fileName = fileText.getText();
               wait = false;
             }
         });
@@ -98,14 +122,16 @@ public class TCPClient {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         } catch(UnknownHostException e) {
             System.err.println("Don't know about router: " + routerName);
+            messages.setText("Don't know about router: " + routerName);
             System.exit(1);
         } catch (IOException e) {
             System.err.println("Couldn't get I/O for the connection to: " + routerName);
+            messages.setText("Couldn't get I/O for the connection to: " + routerName);
             System.exit(1);
         }
 
         // Variables for message passing	
-        Reader reader = new FileReader("file.txt"); 
+        Reader reader = new FileReader(fileName); 
         BufferedReader fromFile =  new BufferedReader(reader); // reader for the string file
         String fromServer; // messages received from ServerRouter
         String fromUser; // messages sent to ServerRouter
@@ -116,6 +142,7 @@ public class TCPClient {
         out.println(address);// initial send (IP of the destination Server)
         fromServer = in.readLine();//initial receive from router (verification of connection)
         System.out.println("ServerRouter: " + fromServer);
+        messages.setText("ServerRouter: " + fromServer);
         out.println(host); // Client sends the IP of its machine as initial send
         t0 = System.currentTimeMillis();
         TimeStuff.startTimer();
@@ -123,16 +150,18 @@ public class TCPClient {
         // Communication while loop
         while ((fromServer = in.readLine()) != null) {
             System.out.println("Server: " + fromServer);
+            messages.setText(messages.getText() + "\n" + "Server: " + fromServer);
            // t1 = System.currentTimeMillis();
             if (fromServer.equals("Bye.")) // exit statement
                 break;
            // t = t1 - t0;
             //System.out.println("Cycle time: " + t);
-            TimeStuff.startTimer();
+            TimeStuff.stopTimer("Cycle time: ");
 
             fromUser = fromFile.readLine(); // reading strings from a file
             if (fromUser != null) {
                 System.out.println("Client: " + fromUser);
+                messages.setText(messages.getText() + "\n" + "Client: " + fromUser);
                 out.println(fromUser); // sending the strings to the Server via ServerRouter
                 t0 = System.currentTimeMillis();
             }
