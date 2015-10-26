@@ -13,7 +13,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 
-
 public class TCPServer {
 	
 	static boolean wait = true;
@@ -22,7 +21,7 @@ public class TCPServer {
 	static String routerName;
 	
     public static void main(String[] args) throws IOException {
-      	
+      	TimeStuff.initTimer();
         // Variables for setting up connection and communication
         Socket Socket = null; // socket to connect with ServerRouter
         PrintWriter out = null; // for writing to ServerRouter
@@ -35,7 +34,7 @@ public class TCPServer {
         
         JFrame f = new JFrame();
         f.setTitle("Server");
-        f.setSize(300, 250);
+        f.setSize(300, 275);
         f.setLocationRelativeTo(null);
        
         
@@ -49,6 +48,7 @@ public class TCPServer {
         JLabel port = new JLabel("Port Number: ");
         JTextField portText = new JTextField(Integer.toString(SockNum));
         JButton submit = new JButton("submit");
+        JButton results = new JButton("results");
         
         JTextArea messages = new JTextArea("Messages will show up here.");
         JScrollPane scroll = new JScrollPane(messages);
@@ -75,6 +75,7 @@ public class TCPServer {
         panel.add(portText);
         panel.add(submit);
         panel.add(scroll);
+        panel.add(results);
         //panel.add(status);
         
         f.add(panel, BorderLayout.CENTER);
@@ -91,6 +92,12 @@ public class TCPServer {
               String tempPort = portText.getText();
               SockNum = Integer.parseInt(tempPort);
               wait = false;
+            }
+        });
+        
+        submit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+              TimeStuff.saveMessageToFile("results.txt");
             }
         });
         

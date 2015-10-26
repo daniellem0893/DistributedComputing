@@ -37,6 +37,7 @@ public class SThread extends Thread
             }
 
             //Check if destination is in the routing table. If it is, get its corresponding socket and instantiate outTo to write to it.
+            //long rTableLookupStartTime = System.currentTimeMillis();
             TimeStuff.startTimer();
             for (int i = 0; i < 10; i++) {
                 if (destination.equals((String) RTable[i][0])){
@@ -47,6 +48,7 @@ public class SThread extends Thread
                 }
             }
             TimeStuff.stopTimer("Routing table lookup for destination \"" + destination + "\":");
+           // TimeStuff.saveMessageToFile("results.txt");
             //Communication loop: Read each line from in and print it to outTo	
             while ((inputLine = in.readLine()) != null) {
                 System.out.println("Client/Server said: " + inputLine);

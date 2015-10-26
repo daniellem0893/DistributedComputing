@@ -10,7 +10,7 @@ public class TCPServerRouter {
 	static boolean wait = true;
 	
     public static void main(String[] args) throws IOException {
-    	
+    	TimeStuff.initTimer();
     	 Socket clientSocket = null; // socket for the thread
     	 //ServerSocket serverSocket = null; // server socket for accepting connections
     	 int ind = 0; // indext in the routing table
@@ -32,6 +32,7 @@ public class TCPServerRouter {
       //  JLabel status = new JLabel("Waiting to establish port number.");
         JTextField text = new JTextField();
         JButton submit = new JButton("submit");
+        JButton results = new JButton("results");
         
         JTextArea messages = new JTextArea("Messages will show up here.");
         JScrollPane scroll = new JScrollPane(messages);
@@ -54,10 +55,17 @@ public class TCPServerRouter {
             }          
          });
         
+        submit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+              TimeStuff.saveMessageToFile("results.txt");
+            }          
+         });
+        
         panel.add(port);
         panel.add(text);
         panel.add(submit);
         panel.add(scroll);
+        panel.add(results);
         //panel.add(status);
         
         
@@ -76,6 +84,8 @@ public class TCPServerRouter {
 				e1.printStackTrace();
 			}
         }
+        
+       // TimeStuff.initTimer();
         
         //Accepting connections
         ServerSocket serverSocket = null; // server socket for accepting connections

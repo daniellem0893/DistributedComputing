@@ -22,7 +22,7 @@ public class TimeStuff {
         return mainTimer._stopTimer(m);
     }
     public static void saveMessageToFile(String filename){
-        if(mainTimer == null) return;
+        if(mainTimer == null) { System.out.println("feeffe");return;}
         mainTimer._saveMessageToFile(filename);
     }
     
@@ -49,7 +49,7 @@ public class TimeStuff {
         try {
             PrintWriter writer;
             writer = new PrintWriter(fileName, "UTF-8");
-            writer.println("msg");
+            writer.println(msg);
             writer.close();
         } 
         catch (FileNotFoundException ex) { System.out.println("File not found!"); } 
