@@ -34,7 +34,7 @@ public class TCPClient {
 		SockNum = 8181; // port number
 
 		JFrame f = new JFrame();
-		f.setTitle("Server");
+		f.setTitle("Client");
 		f.setSize(305, 300);
 		f.setLocationRelativeTo(null);
 
@@ -42,13 +42,13 @@ public class TCPClient {
 
 		JLabel rName = new JLabel("Router Name: ");
 		// JLabel status = new JLabel("Waiting to establish port number.");
-		JTextField rNameText = new JTextField(routerName);
+		final JTextField rNameText = new JTextField(routerName);
 		JLabel hName = new JLabel("Host Name: ");
-		JTextField hostText = new JTextField(host);
+		final JTextField hostText = new JTextField(host);
 		JLabel port = new JLabel("Port Number: ");
-		JTextField portText = new JTextField(Integer.toString(SockNum));
+		final JTextField portText = new JTextField(Integer.toString(SockNum));
 		JLabel file = new JLabel("File Name: ");
-		JTextField fileText = new JTextField("file.txt");
+		final JTextField fileText = new JTextField("file.txt");
 		JButton submit = new JButton("submit");
 		JButton results = new JButton("results");
 

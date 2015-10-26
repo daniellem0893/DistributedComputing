@@ -42,11 +42,11 @@ public class TCPServer {
         
         JLabel rName = new JLabel("Router Name: ");
       //  JLabel status = new JLabel("Waiting to establish port number.");
-        JTextField rNameText = new JTextField(routerName);
+        final JTextField rNameText = new JTextField(routerName);
         JLabel hName = new JLabel("Host Name: ");
-        JTextField hostText = new JTextField(host);
+        final JTextField hostText = new JTextField(host);
         JLabel port = new JLabel("Port Number: ");
-        JTextField portText = new JTextField(Integer.toString(SockNum));
+        final JTextField portText = new JTextField(Integer.toString(SockNum));
         JButton submit = new JButton("submit");
         JButton results = new JButton("results");
         
@@ -95,7 +95,7 @@ public class TCPServer {
             }
         });
         
-        submit.addActionListener(new ActionListener() {
+        results.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
               TimeStuff.saveMessageToFile("results.txt");
             }

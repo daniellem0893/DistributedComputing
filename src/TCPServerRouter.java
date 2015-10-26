@@ -30,7 +30,7 @@ public class TCPServerRouter {
         
         JLabel port = new JLabel("Port Number: ");
       //  JLabel status = new JLabel("Waiting to establish port number.");
-        JTextField text = new JTextField();
+        final JTextField text = new JTextField();
         JButton submit = new JButton("submit");
         JButton results = new JButton("results");
         
@@ -55,7 +55,7 @@ public class TCPServerRouter {
             }          
          });
         
-        submit.addActionListener(new ActionListener() {
+        results.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
               TimeStuff.saveMessageToFile("results.txt");
             }          
