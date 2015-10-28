@@ -149,6 +149,7 @@ public class TCPClient {
 		String address = addr.getHostAddress();// "10.5.2.109"; // destination
 												// IP (Server)
 		long t0, t1, t;
+		long total = 0;
 
 		// Communication process (initial sends/receives
 		out.println(address);// initial send (IP of the destination Server)
@@ -162,14 +163,18 @@ public class TCPClient {
 
 		// Communication while loop
 		while ((fromServer = in.readLine()) != null) {
-			System.out.println("Server: " + fromServer);
-			messages.setText(messages.getText() + "\n" + "Server: " + fromServer);
-			// t1 = System.currentTimeMillis();
+			System.out.println("Server: " + fromServer.toUpperCase());
+			messages.setText(messages.getText() + "\n" + "Server: " + fromServer.toUpperCase());
+			 t1 = System.currentTimeMillis();
+			 TimeStuff.startTimer();
 			if (fromServer.equals("Bye.")) // exit statement
 				break;
-			// t = t1 - t0;
-			// System.out.println("Cycle time: " + t);
+			 t = t1 - t0;
+			 total = total + t;
+			 System.out.println("Cycle time: " + t);
 			TimeStuff.stopTimer("Cycle time: ");
+			System.out.println("Total time: " + total);
+			messages.setText(messages.getText() + "\n" + "Total time: " + total);
 
 			fromUser = fromFile.readLine(); // reading strings from a file
 			if (fromUser != null) {
@@ -180,6 +185,8 @@ public class TCPClient {
 				t0 = System.currentTimeMillis();
 			}
 		}
+		
+		
 
 		// closing connections
 		out.close();
